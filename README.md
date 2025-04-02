@@ -1,28 +1,28 @@
 # Hình ảnh chạy thuật toán
 
 **Thuật toán BFS**  
-![BFS](video/bfs.gif)
+![BFS](video/bfs-ezgif.com-video-to-gif-converter.gif)
 
 **Thuật toán DFS**  
-![DFS](video/dfs.gif)
+![DFS](video/dfs-ezgif.com-video-to-gif-converter.gif)
 
 **Thuật toán Greedy**  
-![Greedy](video/greedy.gif)
+![Greedy](video/greedy-ezgif.com-video-to-gif-converter.gif)
 
 **Thuật toán IDDFS**  
-![IDDFS](video/IDDFS.gif)
+![IDDFS](video/IDDFS-ezgif.com-video-to-gif-converter.gif)
 
 **Thuật toán UCS**  
-![UCS](video/UCS.gif)
+![UCS](video/UCS-ezgif.com-video-to-gif-converter.gif)
 
 **Thuật toán A\***  
-![A_star](video/A_star.gif)
+![A_star](video/A_star-ezgif.com-video-to-gif-converter.gif)
 
 **Thuật toán IDA\***  
-![IDA_star](video/IDA_star.gif)
+![IDA_star](video/IDA_star-ezgif.com-video-to-gif-converter.gif)
 
 **Thuật toán Simple Hill Climbing**  
-![Simple Hill](video/simplehill.gif)
+![Simple Hill](video/simplehillclimbing-ezgif.com-video-to-gif-converter.gif)
 
 **Thuật toán Steepest Ascent Hill Climbing**  
-![Steepest Hill](video/steepest.gif)
+![Steepest Hill](video/steepestascenthillclimbing-ezgif.com-video-to-gif-converter.gif)

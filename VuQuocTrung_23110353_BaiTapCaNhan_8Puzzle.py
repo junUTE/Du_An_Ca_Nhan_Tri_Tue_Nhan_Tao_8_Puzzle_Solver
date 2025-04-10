@@ -352,7 +352,7 @@ def Simulated_Annealing(start, goal):
     if current == goal:
         return path, expansions
     else:
-        return path, expansions  # vẫn trả path đã đi
+        return path, expansions  # Return the path even if the goal is not reached
 
 def Beam_Search(start, goal, beam_width=3):
     """Beam Search algorithm for solving the 8-puzzle problem."""
@@ -391,6 +391,79 @@ def Beam_Search(start, goal, beam_width=3):
         queue = next_queue
 
     return None, expansions  # Return None if no solution is found
+
+def And_or_graph_search(start, goal, max_depth=50):
+    """
+    Hàm tìm kiếm AND-OR để giải bài toán 8-puzzle.
+    """
+    expansions = 0
+
+    def goal_test(state):
+        """
+        Kiểm tra xem trạng thái hiện tại có phải là trạng thái mục tiêu không.
+        """
+        return state == goal
+
+    def results(state, action):
+        """
+        Trả về trạng thái mới sau khi thực hiện hành động.
+        """
+        new_state = state[:]
+        idx = new_state.index(0)
+        row, col = divmod(idx, 3)
+        new_row, new_col = row + action[0], col + action[1]
+        if 0 <= new_row < 3 and 0 <= new_col < 3:
+            new_idx = new_row * 3 + new_col
+            new_state[idx], new_state[new_idx] = new_state[new_idx], new_state[idx]
+        return new_state
+
+    def get_neighbors(state):
+        """
+        Lấy danh sách các trạng thái lân cận từ trạng thái hiện tại.
+        """
+        neighbors = []
+        idx = state.index(0)
+        row, col = divmod(idx, 3)
+        for move in MOVES:
+            new_row, new_col = row + move[0], col + move[1]
+            if 0 <= new_row < 3 and 0 <= new_col < 3:
+                new_idx = new_row * 3 + new_col
+                new_state = state[:]
+                new_state[idx], new_state[new_idx] = new_state[new_idx], new_state[idx]
+                neighbors.append(new_state)
+        return neighbors
+
+    def or_search(state, path, depth):
+        """
+        Hàm OR-SEARCH: trả về kế hoạch điều kiện hoặc thất bại.
+        """
+        nonlocal expansions
+        if goal_test(state):
+            return [state]
+        if state in path or depth > max_depth:
+            return None
+        expansions += 1
+        for neighbor in get_neighbors(state):
+            if neighbor not in path:
+                plan = and_search([neighbor], path + [state], depth + 1)
+                if plan:
+                    return [state] + plan
+        return None
+
+    def and_search(states, path, depth):
+        """
+        Hàm AND-SEARCH: trả về kế hoạch điều kiện hoặc thất bại.
+        """
+        full_plan = []
+        for s in states:
+            plan = or_search(s, path, depth)
+            if plan is None:
+                return None
+            full_plan.extend(plan[1:] if full_plan else plan)
+        return full_plan
+
+    plan = or_search(start, [], 0)
+    return (plan, expansions) if plan else (None, expansions)
 
 
 #------------------------------------------------------
@@ -440,7 +513,8 @@ def solve_puzzle(start, goal, algorithm, canvas, root):
         "Steepest Ascent Hill Climbing": steepest_ascent_hill_climbing,
         "Stochastic Hill Climbing": Stochastic_hill_Climbing,
         "Simulated Annealing": Simulated_Annealing,
-        "Beam Search": Beam_Search
+        "Beam Search": Beam_Search,
+        "And Or Graph Search": And_or_graph_search
     }
 
     if not is_solvable(start):
@@ -639,7 +713,7 @@ algorithm_frame = ttk.LabelFrame(input_frame, text="Algorithm Selection", paddin
 algorithm_frame.pack(pady=5)
 algo_var = tk.StringVar(value="")
 algo_combobox = ttk.Combobox(algorithm_frame, textvariable=algo_var, state="readonly", width=25)
-algo_combobox['values'] = sorted(["BFS", "DFS", "UCS", "Greedy", "IDDFS", "A*", "IDA*", "Simple Hill Climbing", "Steepest Ascent Hill Climbing", "Stochastic Hill Climbing", "Simulated Annealing", "Beam Search"])  # Add Hill Climbing
+algo_combobox['values'] = sorted(["BFS", "DFS", "UCS", "Greedy", "IDDFS", "A*", "IDA*", "Simple Hill Climbing", "Steepest Ascent Hill Climbing", "Stochastic Hill Climbing", "Simulated Annealing", "Beam Search", "And Or Graph Search"])  # Add Hill Climbing
 algo_combobox.pack()
 
 # Control Buttons

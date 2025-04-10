@@ -3,6 +3,7 @@ from tkinter import messagebox
 from collections import deque
 import heapq
 from time import sleep, time
+import random
 from tkinter import ttk  # Import ttk for combobox and LabelFrame
 
 MOVES = [(0,1), (1,0), (0,-1), (-1,0)]
@@ -10,7 +11,7 @@ label_font = ("Arial", 14, "bold")
 text_font = ("Arial", 12)
 
 def bfs(start, goal):
-    queue = deque([(start, [])])
+    queue = deque([(start, [start])])  # Include start in the path
     visited = set([tuple(start)])
     expansions = 0  # Track the number of expansions
 
@@ -34,7 +35,7 @@ def bfs(start, goal):
     return None, expansions
 
 def dfs(start, goal, max_depth=50):
-    stack = [(start, [], 0)]
+    stack = [(start, [start], 0)]  # Include start in the path
     visited = set([tuple(start)])
     expansions = 0  # Track the number of expansions
 
@@ -60,7 +61,7 @@ def dfs(start, goal, max_depth=50):
     return None, expansions
 
 def ucs(start, goal):
-    queue = [(0, start, [])]  # Priority queue with (cost, state, path)
+    queue = [(0, start, [start])]  # Include start in the path
     visited = set([tuple(start)])
     expansions = 0  # Track the number of expansions
 
@@ -89,7 +90,7 @@ def heuristic(state, goal):
                for i, val in enumerate(state) if val != 0)
 
 def greedy(start, goal):
-    queue = [(heuristic(start, goal), start, [])]  # Priority queue with (heuristic, state, path)
+    queue = [(heuristic(start, goal), start, [start])]  # Include start in the path
     visited = set([tuple(start)])
     expansions = 0
 
@@ -133,13 +134,13 @@ def iddfs(start, goal, max_depth=50):
 
     for depth in range(max_depth + 1):
         visited = set([tuple(start)])
-        result, expansions = dls(start, goal, depth, [], visited)
+        result, expansions = dls(start, goal, depth, [start], visited)  # Include start in the path
         if result:
             return result, expansions
     return None, len(visited)
 
 def a_star(start, goal):
-    queue = [(heuristic(start, goal), 0, start, [])]  # Priority queue with (f, g, state, path)
+    queue = [(heuristic(start, goal), 0, start, [start])]  # Include start in the path
     visited = set([tuple(start)])
     expansions = 0
 
@@ -190,7 +191,7 @@ def ida_star(start, goal):
         return None, min_bound
 
     bound = heuristic(start, goal)
-    path = [start]
+    path = [start]  # Include start in the path
     visited = set([tuple(start)])
     while True:
         result, bound = search(path, 0, bound)
@@ -201,7 +202,7 @@ def ida_star(start, goal):
 
 def simple_hill_climbing(start, goal):
     current = start
-    path = [start]
+    path = [start]  # Include start in the path
     expansions = 0
 
     while current != goal:
@@ -235,7 +236,7 @@ def simple_hill_climbing(start, goal):
 def steepest_ascent_hill_climbing(start, goal):
     """Steepest-Ascent Hill Climbing algorithm."""
     current = start
-    path = [start]
+    path = [start]  # Include start in the path
     expansions = 0
 
     while current != goal:
@@ -266,6 +267,131 @@ def steepest_ascent_hill_climbing(start, goal):
         path.append(current)
 
     return path, expansions
+
+def Stochastic_hill_Climbing(start, goal):
+    current = start
+    path = [start]  # Include start in the path
+    expansions = 0
+
+    while current != goal:
+        idx = current.index(0)
+        row, col = divmod(idx, 3)
+        neighbors = []
+        # Generate all possible neighbors
+        for move in MOVES:
+            new_row, new_col = row + move[0], col + move[1]
+            if 0 <= new_row < 3 and 0 <= new_col < 3:
+                new_idx = new_row * 3 + new_col
+                new_state = current[:]
+                new_state[idx], new_state[new_idx] = new_state[new_idx], new_state[idx]
+                neighbors.append(new_state)
+
+        # Filter neighbors with better heuristic values
+        better_neighbors = [neighbor for neighbor in neighbors if heuristic(neighbor, goal) < heuristic(current, goal)]
+        expansions += len(neighbors)
+
+        if not better_neighbors:
+            # No better neighbors, terminate
+            return None, expansions
+
+        # Randomly select one of the better neighbors
+        current = random.choice(better_neighbors)
+        path.append(current)
+
+    return path, expansions
+
+def Simulated_Annealing(start, goal):
+    current = start
+    path = [start]
+    expansions = 0
+    temperature = 5.0
+    cooling_rate = 0.99
+    best = current
+    best_score = heuristic(current, goal)
+
+    while current != goal and temperature > 0.01:
+        idx = current.index(0)
+        row, col = divmod(idx, 3)
+        neighbors = []
+
+        for move in MOVES:
+            new_row, new_col = row + move[0], col + move[1]
+            if 0 <= new_row < 3 and 0 <= new_col < 3:
+                new_idx = new_row * 3 + new_col
+                new_state = current[:]
+                new_state[idx], new_state[new_idx] = new_state[new_idx], new_state[idx]
+                neighbors.append(new_state)
+
+        expansions += len(neighbors)
+
+        if not neighbors:
+            return path, expansions  # Return the path even if the goal is not reached
+
+        probabilities = []
+        for neighbor in neighbors:
+            delta_e = heuristic(current, goal) - heuristic(neighbor, goal)
+            if delta_e > 0:
+                probabilities.append(1.0)
+            else:
+                probabilities.append(pow(2.71828, delta_e / temperature))
+
+        total_prob = sum(probabilities)
+        probabilities = [p / total_prob for p in probabilities]
+
+        current = random.choices(neighbors, probabilities)[0]
+        path.append(current)
+
+        # Update the best state
+        h = heuristic(current, goal)
+        if h < best_score:
+            best = current
+            best_score = h
+
+        temperature *= cooling_rate
+
+    if current == goal:
+        return path, expansions
+    else:
+        return path, expansions  # vẫn trả path đã đi
+
+def Beam_Search(start, goal, beam_width=3):
+    """Beam Search algorithm for solving the 8-puzzle problem."""
+    queue = [(heuristic(start, goal), start, [start])]  # Include start in the path
+    visited = set([tuple(start)])  # Track visited states
+
+    expansions = 0  # Count the number of expansions
+    while queue:
+        # Sort the queue based on the heuristic value
+        queue.sort(key=lambda x: x[0])
+        # Keep only the top beam_width elements
+        queue = queue[:beam_width]
+
+        next_queue = []  # Prepare the next level of the queue
+        for _, state, path in queue:
+            expansions += 1
+            if state == goal:
+                return path, expansions  # Return the full path and expansions
+            idx = state.index(0)
+            row, col = divmod(idx, 3)
+            neighbors = []
+            for move in MOVES:
+                new_row, new_col = row + move[0], col + move[1]
+                if 0 <= new_row < 3 and 0 <= new_col < 3:
+                    new_idx = new_row * 3 + new_col
+                    new_state = state[:]
+                    new_state[idx], new_state[new_idx] = new_state[new_idx], new_state[idx]
+                    if tuple(new_state) not in visited:
+                        neighbors.append(new_state)
+                        visited.add(tuple(new_state))
+            # Add neighbors to the next queue with their heuristic value
+            for neighbor in neighbors:
+                next_queue.append((heuristic(neighbor, goal), neighbor, path + [neighbor]))
+
+        # Update the queue for the next iteration
+        queue = next_queue
+
+    return None, expansions  # Return None if no solution is found
+
 
 #------------------------------------------------------
 # Add a function to check if the puzzle is solvable
@@ -311,7 +437,10 @@ def solve_puzzle(start, goal, algorithm, canvas, root):
         "A*": a_star,
         "IDA*": ida_star,
         "Simple Hill Climbing": simple_hill_climbing,
-        "Steepest Ascent Hill Climbing": steepest_ascent_hill_climbing
+        "Steepest Ascent Hill Climbing": steepest_ascent_hill_climbing,
+        "Stochastic Hill Climbing": Stochastic_hill_Climbing,
+        "Simulated Annealing": Simulated_Annealing,
+        "Beam Search": Beam_Search
     }
 
     if not is_solvable(start):
@@ -328,8 +457,8 @@ def solve_puzzle(start, goal, algorithm, canvas, root):
 
     if solution:
         for i, step in enumerate(solution):
-            draw_board(canvas, step, i + 1, elapsed_time, expansions)
-            log_step(i + 1, step)  # Log each step to the text box
+            draw_board(canvas, step, i, elapsed_time, expansions)
+            log_step(i, step)  # Log each step to the text box
             root.update()
             sleep(0.5)
         save_to_data_grid(algorithm, elapsed_time, expansions)  # Save results to the data grid
@@ -339,6 +468,10 @@ def solve_puzzle(start, goal, algorithm, canvas, root):
 
 def start_solver():
     try:
+        # Disable "OK" and "Reset" buttons
+        ok_button.config(state="disabled")
+        reset_button.config(state="disabled")
+
         start_state = [int(entry.get()) if entry.get() else 0 for row in start_entries for entry in row]
         goal_state = [int(entry.get()) if entry.get() else 0 for row in goal_entries for entry in row]
         
@@ -358,17 +491,42 @@ def start_solver():
         solve_puzzle(start_state, goal_state, algorithm, canvas, root)
     except ValueError:
         messagebox.showerror("Error", "Invalid input, please enter numbers")
+    except Exception as e:
+        messagebox.showerror("Error", f"An unexpected error occurred: {e}")
+    finally:
+        # Re-enable "OK" and "Reset" buttons after the process is complete
+        ok_button.config(state="normal")
+        reset_button.config(state="normal")
+
+def quit_program():
+    """Gracefully quit the program."""
+    try:
+        if messagebox.askyesno("Quit", "Are you sure you want to quit?"):
+            root.destroy()  # Destroy the root window to exit the program
+    except Exception as e:
+        messagebox.showerror("Error", f"An error occurred while quitting: {e}")
 
 def reset():
+    # Clear the start state input fields
     for row in start_entries:
         for entry in row:
             entry.delete(0, tk.END)
+    
+    # Reset the goal state input fields to default values
     for i, row in enumerate(goal_entries):
         for j, entry in enumerate(row):
             entry.delete(0, tk.END)
-            # Populate goal state with default values
             entry.insert(0, [1, 2, 3, 4, 5, 6, 7, 8, 0][i * 3 + j])
+    
+    # Clear the canvas
     canvas.delete('all')
+    
+    # Clear the Execution Steps text box
+    text_box.delete(1.0, tk.END)
+    
+    # Clear the Algorithm Results data grid
+    for item in data_grid.get_children():
+        data_grid.delete(item)
 
 def confirm_input():
     try:
@@ -384,6 +542,14 @@ def confirm_input():
             messagebox.showerror("Error", "Invalid Initial State. Please enter numbers 0-8 exactly once.")
             return
         
+        # Clear the Algorithm Results data grid
+        for item in data_grid.get_children():
+            data_grid.delete(item)
+        
+        # Clear the Execution Steps text box
+        text_box.delete(1.0, tk.END)
+        
+        # Draw the board with the new start state
         draw_board(canvas, start_state, 0, 0)
     except ValueError:
         messagebox.showerror("Error", "Invalid input, please enter numbers")
@@ -437,9 +603,9 @@ data_grid = ttk.Treeview(data_grid_frame, columns=("Algorithm", "Time", "Expansi
 data_grid.heading("Algorithm", text="Algorithm")
 data_grid.heading("Time", text="Time (s)")
 data_grid.heading("Expansions", text="Expansions")
-data_grid.column("Algorithm", width=100, anchor="center")
-data_grid.column("Time", width=80, anchor="center")
-data_grid.column("Expansions", width=100, anchor="center")
+data_grid.column("Algorithm", width=200, anchor="center")
+data_grid.column("Time", width=110, anchor="center")
+data_grid.column("Expansions", width=150, anchor="center")
 data_grid.pack()
 
 # Add a text box below the data grid view
@@ -452,7 +618,8 @@ scrollbar.pack(side="right", fill="y")
 text_box.config(yscrollcommand=scrollbar.set)
 
 # OK Button for Initial State
-tk.Button(initial_state_frame, text="OK", command=confirm_input, bg="lightblue", fg="black").grid(row=3, column=0, columnspan=3, pady=5)  # Use grid instead of pack
+ok_button = tk.Button(initial_state_frame, text="OK", command=confirm_input, bg="lightblue", fg="black")
+ok_button.grid(row=3, column=0, columnspan=3, pady=5)  # Use grid instead of pack
 
 # Goal State Input
 goal_state_frame = ttk.LabelFrame(input_frame, text="Goal State", padding=(10, 10), style="Custom.TLabelframe")
@@ -472,18 +639,19 @@ algorithm_frame = ttk.LabelFrame(input_frame, text="Algorithm Selection", paddin
 algorithm_frame.pack(pady=5)
 algo_var = tk.StringVar(value="")
 algo_combobox = ttk.Combobox(algorithm_frame, textvariable=algo_var, state="readonly", width=25)
-algo_combobox['values'] = sorted(["BFS", "DFS", "UCS", "Greedy", "IDDFS", "A*", "IDA*", "Simple Hill Climbing", "Steepest Ascent Hill Climbing"])  # Add Hill Climbing
+algo_combobox['values'] = sorted(["BFS", "DFS", "UCS", "Greedy", "IDDFS", "A*", "IDA*", "Simple Hill Climbing", "Steepest Ascent Hill Climbing", "Stochastic Hill Climbing", "Simulated Annealing", "Beam Search"])  # Add Hill Climbing
 algo_combobox.pack()
 
 # Control Buttons
 control_frame = ttk.LabelFrame(input_frame, text="Controls", padding=(10, 10), style="Custom.TLabelframe")
 control_frame.pack(pady=5)
 tk.Button(control_frame, text="Run", command=start_solver, bg="lightgreen", fg="black").pack(side="left", padx=5)
-tk.Button(control_frame, text="Reset", command=reset, bg="lightcoral", fg="black").pack(side="left", padx=5)
+reset_button = tk.Button(control_frame, text="Reset", command=reset, bg="#FFA07A", fg="black")
+reset_button.pack(side="left", padx=5)
+tk.Button(control_frame, text="Quit", command=quit_program, bg="lightcoral", fg="black").pack(side="left", padx=5)
 
 # Initialize the board with default values
 default_board = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 draw_board(canvas, default_board, 0, 0.0, 0)
 
 root.mainloop()
-# End of file

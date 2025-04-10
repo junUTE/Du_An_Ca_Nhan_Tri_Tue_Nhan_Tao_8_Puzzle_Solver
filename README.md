@@ -1,5 +1,5 @@
 # Hình ảnh chạy thuật toán
-
+## Thuật toán tìm kiếm
 **🔍 Thuật toán BFS**  
 ![BFS](video/bfs-ezgif.com-video-to-gif-converter.gif)
 
@@ -21,6 +21,7 @@
 **🔍 Thuật toán IDA\***  
 ![IDA_star](video/IDA_star-ezgif.com-video-to-gif-converter.gif)
 
+## Thuật toán tối ưu hóa
 **🏔️ Thuật toán Simple Hill Climbing**  
 ![Simple Hill](video/simplehillclimbing-ezgif.com-video-to-gif-converter.gif)
 

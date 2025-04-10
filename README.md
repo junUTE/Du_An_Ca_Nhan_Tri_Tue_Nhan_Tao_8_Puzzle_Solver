@@ -26,3 +26,9 @@
 
 **Thuật toán Steepest Ascent Hill Climbing**  
 ![Steepest Hill](video/steepestascenthillclimbing-ezgif.com-video-to-gif-converter.gif)
+
+**Thuật toán Stochastic Hill Climbing**
+
+**Thuật toán Simulated Annealing**
+
+**Thuật toán Beam Search**

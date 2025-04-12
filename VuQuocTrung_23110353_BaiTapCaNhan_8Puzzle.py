@@ -713,7 +713,7 @@ algorithm_frame = ttk.LabelFrame(input_frame, text="Algorithm Selection", paddin
 algorithm_frame.pack(pady=5)
 algo_var = tk.StringVar(value="")
 algo_combobox = ttk.Combobox(algorithm_frame, textvariable=algo_var, state="readonly", width=25)
-algo_combobox['values'] = sorted(["BFS", "DFS", "UCS", "Greedy", "IDDFS", "A*", "IDA*", "Simple Hill Climbing", "Steepest Ascent Hill Climbing", "Stochastic Hill Climbing", "Simulated Annealing", "Beam Search", "And Or Graph Search"])  # Add Hill Climbing
+algo_combobox['values'] = sorted(["BFS", "DFS", "UCS", "Greedy", "IDDFS", "A*", "IDA*", "Simple Hill Climbing", "Steepest Ascent Hill Climbing", "Stochastic Hill Climbing", "Simulated Annealing", "Beam Search", "And Or Graph Search"])
 algo_combobox.pack()
 
 # Control Buttons

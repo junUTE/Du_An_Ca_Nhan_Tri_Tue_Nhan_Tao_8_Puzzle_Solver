@@ -465,6 +465,42 @@ def And_or_graph_search(start, goal, max_depth=50):
     plan = or_search(start, [], 0)
     return (plan, expansions) if plan else (None, expansions)
 
+def searching_with_no_observation(start, goal, max_steps=1000):
+    current = start
+    path = [start]
+    visited = set()
+    visited.add(tuple(start))
+    expansions = 0
+
+    for step in range(max_steps):
+        if current == goal:
+            return path, expansions
+
+        idx = current.index(0)
+        row, col = divmod(idx, 3)
+        neighbors = []
+
+        for move in MOVES:
+            new_row, new_col = row + move[0], col + move[1]
+            if 0 <= new_row < 3 and 0 <= new_col < 3:
+                new_idx = new_row * 3 + new_col
+                new_state = current[:]
+                new_state[idx], new_state[new_idx] = new_state[new_idx], new_state[idx]
+                if tuple(new_state) not in visited:
+                    neighbors.append(new_state)
+                    visited.add(tuple(new_state))
+
+        expansions += len(neighbors)
+
+        if not neighbors:
+            return None, expansions
+
+        current = random.choice(neighbors)
+        path.append(current)
+
+    return None, expansions
+
+
 
 #------------------------------------------------------
 # Add a function to check if the puzzle is solvable
@@ -514,7 +550,8 @@ def solve_puzzle(start, goal, algorithm, canvas, root):
         "Stochastic Hill Climbing": Stochastic_hill_Climbing,
         "Simulated Annealing": Simulated_Annealing,
         "Beam Search": Beam_Search,
-        "And Or Graph Search": And_or_graph_search
+        "And Or Graph Search": And_or_graph_search,
+        "Searching With No Observation": searching_with_no_observation
     }
 
     if not is_solvable(start):
@@ -713,7 +750,20 @@ algorithm_frame = ttk.LabelFrame(input_frame, text="Algorithm Selection", paddin
 algorithm_frame.pack(pady=5)
 algo_var = tk.StringVar(value="")
 algo_combobox = ttk.Combobox(algorithm_frame, textvariable=algo_var, state="readonly", width=25)
-algo_combobox['values'] = sorted(["BFS", "DFS", "UCS", "Greedy", "IDDFS", "A*", "IDA*", "Simple Hill Climbing", "Steepest Ascent Hill Climbing", "Stochastic Hill Climbing", "Simulated Annealing", "Beam Search", "And Or Graph Search"])
+algo_combobox['values'] = sorted(["BFS",
+                                   "DFS",
+                                    "UCS",
+                                    "Greedy",
+                                    "IDDFS",
+                                    "A*",
+                                    "IDA*",
+                                    "Simple Hill Climbing", 
+                                    "Steepest Ascent Hill Climbing",
+                                    "Stochastic Hill Climbing", 
+                                    "Simulated Annealing", 
+                                    "Beam Search", 
+                                    "And Or Graph Search",
+                                    "Searching With No Observation"])
 algo_combobox.pack()
 
 # Control Buttons

@@ -1,35 +1,53 @@
-# Hình ảnh chạy thuật toán
-## Thuật toán tìm kiếm
-**🔍 Thuật toán BFS**  
-![BFS](video/bfs-ezgif.com-video-to-gif-converter.gif)
+# 🎯 8-Puzzle Solver – Tổng hợp thuật toán AI tìm kiếm
 
-**🔍 Thuật toán DFS**  
-![DFS](video/dfs-ezgif.com-video-to-gif-converter.gif)
+## 📁 Thư mục chứa GIF minh họa: `gif/`
 
-**🔍 Thuật toán Greedy**  
-![Greedy](video/greedy-ezgif.com-video-to-gif-converter.gif)
+---
 
-**🔍 Thuật toán IDDFS**  
-![IDDFS](video/IDDFS-ezgif.com-video-to-gif-converter.gif)
+## 🔍 **Thuật toán Tìm kiếm**
 
-**🔍 Thuật toán UCS**  
-![UCS](video/UCS-ezgif.com-video-to-gif-converter.gif)
+### 📌 Breadth-First Search (BFS)
+![BFS](gif/BFSgif.gif)
 
-**🔍 Thuật toán A\***  
-![A_star](video/A_star-ezgif.com-video-to-gif-converter.gif)
+### 📌 Depth-First Search (DFS)
+![DFS](gif/DFS.gif)
 
-**🔍 Thuật toán IDA\***  
-![IDA_star](video/IDA_star-ezgif.com-video-to-gif-converter.gif)
+### 📌 Uniform Cost Search (UCS)
+![UCS](gif/UCS.gif)
 
-## Thuật toán tối ưu hóa
-**🏔️ Thuật toán Simple Hill Climbing**  
-![Simple Hill](video/simplehillclimbing-ezgif.com-video-to-gif-converter.gif)
+### 📌 Greedy Best-First Search
+![Greedy](gif/Greedy.gif)
 
-**🏔️ Thuật toán Steepest Ascent Hill Climbing**  
-![Steepest Hill](video/steepestascenthillclimbing-ezgif.com-video-to-gif-converter.gif)
+### 📌 A\* Search
+![A_star](gif/A_star.gif)
 
-**🏔️ Thuật toán Stochastic Hill Climbing**
+### 📌 Iterative Deepening DFS (IDDFS)
+![IDDFS](gif/IDDFS.gif)
 
-**🔍 Thuật toán Simulated Annealing**
+### 📌 Iterative Deepening A\* (IDA\*)
+![IDA_Star](gif/IDA_Star.gif)
 
-**🔍 Thuật toán Beam Search**
+### 📌 Beam Search
+![Beam Search](gif/Beam_Search.gif)
+
+### 📌 And-Or Graph Search
+![And-or Graph Search](gif/And_or_graph_Search.gif)
+
+### 📌 Searching with No Observation
+![Searching with No Observation](gif/searchinh_with_no_observat.gif)
+
+---
+
+## 🧠 **Thuật toán Tối ưu hóa (Local Search)**
+
+### 🏔️ Simple Hill Climbing
+![Simple Hill Climbing](gif/Simple_Hill_Climbing.gif)
+
+### 🏔️ Steepest-Ascent Hill Climbing
+![Steepest-Ascent Hill Climbing](gif/Steepest_Ascent_Hill_Climbing.gif)
+
+### 🎲 Stochastic Hill Climbing
+![Stochastic Hill Climbing](gif/Stochastic_Hill_Climbing.gif)
+
+### ❄️ Simulated Annealing
+![Simulated Annealing](gif/Simulated_Annealing.gif)

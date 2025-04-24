@@ -5,6 +5,7 @@ import heapq
 from time import sleep, time
 import random
 from tkinter import ttk  # Import ttk for combobox and LabelFrame
+from itertools import permutations
 
 MOVES = [(0,1), (1,0), (0,-1), (-1,0)]
 label_font = ("Arial", 14, "bold")
@@ -500,7 +501,108 @@ def searching_with_no_observation(start, goal, max_steps=1000):
 
     return None, expansions
 
+def Backtracking_Search(state, goal):
+    """
+    Backtracking Search không cần trạng thái đầu.
+    Tự sinh trạng thái ban đầu ngẫu nhiên, đảm bảo solvable.
+    """
+    def get_neighbors(state):
+        idx = state.index(0)
+        row, col = divmod(idx, 3)
+        neighbors = []
+        for move in MOVES:
+            new_row, new_col = row + move[0], col + move[1]
+            if 0 <= new_row < 3 and 0 <= new_col < 3:
+                new_idx = new_row * 3 + new_col
+                new_state = state[:]
+                new_state[idx], new_state[new_idx] = new_state[new_idx], new_state[idx]
+                neighbors.append(new_state)
+        return neighbors
 
+    def backtrack(state, path, visited):
+        nonlocal expansions
+        if state == goal:
+            return path + [state]
+        visited.add(tuple(state))
+        for neighbor in get_neighbors(state):
+            if tuple(neighbor) not in visited:
+                result = backtrack(neighbor, path + [state], visited)
+                expansions += 1
+                if result:
+                    return result
+        visited.remove(tuple(state))  # Backtrack
+        return None
+
+    # Sinh trạng thái ngẫu nhiên hợp lệ
+    while True:
+        start = list(range(9))
+        random.shuffle(start)
+        if is_solvable(start):
+            break
+
+    visited = set()
+    expansions = 0
+    solution = backtrack(start, [], visited)
+
+    return (solution, expansions) if solution else (None, expansions)
+
+def generate_belief_states(partial_state, max_states=1000):
+    # Đảm bảo độ dài đủ 9
+    if len(partial_state) != 9:
+        raise ValueError("Initial state must have exactly 9 positions (some may be None)")
+
+    full = partial_state[:]
+    known_vals = {val for val in full if val is not None}
+    missing_vals = list(set(range(9)) - known_vals)
+
+    belief_states = set()
+    for perm in permutations(missing_vals):
+        temp = full[:]
+        idx = 0
+        for i in range(9):
+            if temp[i] is None:
+                temp[i] = perm[idx]
+                idx += 1
+        if is_solvable(temp):
+            belief_states.add(tuple(temp))
+            if len(belief_states) >= max_states:
+                break
+
+    return [list(state) for state in belief_states]
+
+
+def belief_bfs(partial_start, goal):
+    """
+    Chạy BFS trên tập hợp các trạng thái ban đầu có thể có từ một input thiếu thông tin
+    """
+    start_beliefs = generate_belief_states(partial_start)
+    queue = deque()
+    visited = set()
+    expansions = 0
+
+    for state in start_beliefs:
+        queue.append((state, [state]))
+        visited.add(tuple(state))
+
+    while queue:
+        state, path = queue.popleft()
+        expansions += 1
+        if state == goal:
+            return path, expansions
+        idx = state.index(0)
+        row, col = divmod(idx, 3)
+
+        for move in MOVES:
+            new_row, new_col = row + move[0], col + move[1]
+            if 0 <= new_row < 3 and 0 <= new_col < 3:
+                new_idx = new_row * 3 + new_col
+                new_state = state[:]
+                new_state[idx], new_state[new_idx] = new_state[new_idx], new_state[idx]
+                if tuple(new_state) not in visited:
+                    visited.add(tuple(new_state))
+                    queue.append((new_state, path + [new_state]))
+
+    return None, expansions
 
 #------------------------------------------------------
 # Add a function to check if the puzzle is solvable
@@ -516,7 +618,10 @@ def draw_board(canvas, board, step, elapsed, expansions=0):
         for j in range(3):
             x1, y1 = j * cell_size, i * cell_size
             x2, y2 = x1 + cell_size, y1 + cell_size
-            num = board[i * 3 + j]
+            idx = i * 3 + j
+            if idx >= len(board):
+                continue  # Bỏ qua nếu dữ liệu thiếu
+            num = board[idx]
             if num != 0:
                 canvas.create_rectangle(x1, y1, x2, y2, fill='white', outline='black')
                 canvas.create_text(x1 + 50, y1 + 50, text=str(num), font=('Arial', 36, "bold"))
@@ -524,19 +629,21 @@ def draw_board(canvas, board, step, elapsed, expansions=0):
     time_label.config(text=f"Time: {elapsed:.3f}s")
     expansion_label.config(text=f"Expansions: {expansions}")
 
+
 def save_to_data_grid(algorithm, time_elapsed, expansions):
     """Save algorithm results to the data grid view."""
     data_grid.insert("", "end", values=(algorithm, f"{time_elapsed:.3f}", expansions))
 
 def log_step(step, board):
-    """Log each step of the algorithm execution in the text box."""
     text_box.insert(tk.END, f"Step {step}:\n")
     for i in range(3):
-        text_box.insert(tk.END, f"{board[i * 3:(i + 1) * 3]}\n")
+        row_slice = board[i * 3:(i + 1) * 3]
+        text_box.insert(tk.END, f"{row_slice}\n")
     text_box.insert(tk.END, "\n")
-    text_box.see(tk.END)  # Auto-scroll to the latest entry
+    text_box.see(tk.END)
 
-def solve_puzzle(start, goal, algorithm, canvas, root):
+
+def solve_puzzle(_, __, algorithm, canvas, root):
     algorithms = {
         "BFS": bfs,
         "DFS": dfs,
@@ -551,31 +658,61 @@ def solve_puzzle(start, goal, algorithm, canvas, root):
         "Simulated Annealing": Simulated_Annealing,
         "Beam Search": Beam_Search,
         "And Or Graph Search": And_or_graph_search,
-        "Searching With No Observation": searching_with_no_observation
+        "Searching With No Observation": searching_with_no_observation,
+        "Belief BFS": belief_bfs,
+        "Backtracking Search": Backtracking_Search
     }
 
-    if not is_solvable(start):
-        messagebox.showinfo("Result", "This puzzle is not solvable")
-        return
+    try:
+        if algorithm == "Belief BFS":
+            # Đảm bảo có đủ 9 phần tử, ô rỗng giữ None
+            start_state = [
+                int(entry.get()) if entry.get().isdigit() else None
+                for row in start_entries for entry in row
+            ]
+        else:
+            # Các thuật toán còn lại cần đủ 9 số từ 0–8
+            start_state = [
+                int(entry.get()) if entry.get().isdigit() else 0
+                for row in start_entries for entry in row
+            ]
 
-    text_box.delete(1.0, tk.END)  # Clear the text box before starting
-    start_time = time()
-    solution, expansions = algorithms[algorithm](start, goal)
-    end_time = time()
-    elapsed_time = end_time - start_time
+        goal_state = [
+            int(entry.get()) if entry.get().isdigit() else 0
+            for row in goal_entries for entry in row
+        ]
 
-    draw_board(canvas, start, 0, 0, expansions)
+        if all(v == 0 for v in goal_state):
+            goal_state = [1, 2, 3, 4, 5, 6, 7, 8, 0]
 
-    if solution:
-        for i, step in enumerate(solution):
-            draw_board(canvas, step, i, elapsed_time, expansions)
-            log_step(i, step)  # Log each step to the text box
-            root.update()
-            sleep(0.5)
-        save_to_data_grid(algorithm, elapsed_time, expansions)  # Save results to the data grid
-    else:
-        messagebox.showinfo('Solution', 'No solution found')
-        save_to_data_grid(algorithm, elapsed_time, expansions)  # Save results even if no solution is found
+        if algorithm != "Belief BFS" and not is_solvable(start_state):
+            messagebox.showinfo("Result", "This puzzle is not solvable")
+            return
+
+        text_box.delete(1.0, tk.END)
+        start_time = time()
+        solution, expansions = algorithms[algorithm](start_state, goal_state)
+        end_time = time()
+        elapsed_time = end_time - start_time
+
+        if solution:
+            draw_board(canvas, solution[0], 0, 0, expansions)
+            for i, step in enumerate(solution):
+                draw_board(canvas, step, i, elapsed_time, expansions)
+                log_step(i, step)
+                root.update()
+                sleep(0.5)
+            save_to_data_grid(algorithm, elapsed_time, expansions)
+        else:
+            messagebox.showinfo('Solution', 'No solution found')
+            save_to_data_grid(algorithm, elapsed_time, expansions)
+
+    except ValueError:
+        messagebox.showerror("Error", "Invalid input, please enter numbers")
+    except Exception as e:
+        messagebox.showerror("Error", f"An unexpected error occurred: {e}")
+
+
 
 def start_solver():
     try:
@@ -590,9 +727,9 @@ def start_solver():
         if all(value == 0 for value in goal_state):
             goal_state = [1, 2, 3, 4, 5, 6, 7, 8, 0]
         
-        if all(value == 0 for value in start_state):  # Check if the initial state is empty
-            messagebox.showerror("Error", "Please enter Initial State")
-            return
+        # if all(value == 0 for value in start_state):  # Check if the initial state is empty
+        #     messagebox.showerror("Error", "Please enter Initial State")
+        #     return
         
         algorithm = algo_var.get()
         if not algorithm:
@@ -644,14 +781,14 @@ def confirm_input():
         start_state = [int(entry.get()) if entry.get() else 0 for row in start_entries for entry in row]
         
         # Check for duplicate numbers in the initial state
-        if len(start_state) != len(set(start_state)):
-            messagebox.showerror("Error", "Duplicate numbers found or empty. Please enter again.")
-            return
+        #if len(start_state) != len(set(start_state)):
+           # messagebox.showerror("Error", "Duplicate numbers found or empty. Please enter again.")
+            #return
         
         # Check if the initial state contains exactly the numbers 0-8
-        if sorted(start_state) != list(range(9)):
-            messagebox.showerror("Error", "Invalid Initial State. Please enter numbers 0-8 exactly once.")
-            return
+        # if sorted(start_state) != list(range(9)):
+        #     messagebox.showerror("Error", "Invalid Initial State. Please enter numbers 0-8 exactly once.")
+        #     return
         
         # Clear the Algorithm Results data grid
         for item in data_grid.get_children():
@@ -763,7 +900,9 @@ algo_combobox['values'] = sorted(["BFS",
                                     "Simulated Annealing", 
                                     "Beam Search", 
                                     "And Or Graph Search",
-                                    "Searching With No Observation"])
+                                    "Searching With No Observation",
+                                    "Belief BFS",
+                                    "Backtracking Search"])
 algo_combobox.pack()
 
 # Control Buttons

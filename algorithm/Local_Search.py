@@ -1,3 +1,4 @@
+from utils import is_solvable
 import random
 
 MOVES = [(0,1), (1,0), (0,-1), (-1,0)]
@@ -202,4 +203,3 @@ def Beam_Search(start, goal, beam_width=3):
         queue = next_queue
 
     return None, expansions  # Trả về None nếu không tìm thấy giải pháp
-

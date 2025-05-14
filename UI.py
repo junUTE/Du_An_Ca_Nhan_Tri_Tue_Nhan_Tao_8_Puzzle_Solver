@@ -8,10 +8,10 @@ from utils import is_solvable
 
 from algorithm.Uninformed_Search import bfs, dfs, ucs, iddfs
 from algorithm.Informed_Search import greedy, a_star, ida_star
-from algorithm.Local_Search import simple_hill_climbing, steepest_ascent_hill_climbing, Stochastic_hill_Climbing, Simulated_Annealing, Beam_Search, Genetic_Algorithm
+from algorithm.Local_Search import simple_hill_climbing, steepest_ascent_hill_climbing, Stochastic_hill_Climbing, Simulated_Annealing, Beam_Search
 from algorithm.CSP import backtracking_search, backtracking_with_ac3, trial_and_error
 from algorithm.Searching_in_Complex import And_or_graph_search, searching_with_no_observation, belief_bfs
-from algorithm.Reinforcement_Learning import Q_Learning
+from algorithm.Reinforcement_Learning import Q_Learning, Genetic_Algorithm
 
 
 label_font = ("Arial", 14, "bold")
@@ -74,7 +74,7 @@ def solve_puzzle(_, __, algorithm, canvas, root):
         "Q Learning": Q_Learning,
     }
 
-    # ✅ Danh sách các thuật toán không cần nhập trạng thái đầu
+    # Danh sách các thuật toán không cần nhập trạng thái đầu
     no_input_algorithms = [
         "Backtracking Search",
         "Backtracking AC3",
@@ -86,7 +86,7 @@ def solve_puzzle(_, __, algorithm, canvas, root):
         text_box.delete(1.0, tk.END)
         algorithm = algo_var.get()
 
-        # ✅ Belief BFS dùng input đặc biệt (có thể chứa None)
+        # Belief BFS dùng input đặc biệt (có thể chứa None)
         if algorithm == "Belief BFS":
             start_state = [
                 int(entry.get()) if entry.get().isdigit() else None
@@ -99,12 +99,12 @@ def solve_puzzle(_, __, algorithm, canvas, root):
             if all(v == 0 for v in goal_state):
                 goal_state = [1, 2, 3, 4, 5, 6, 7, 8, 0]
 
-        # ✅ Thuật toán không cần input → tạo mặc định
+        # Thuật toán không cần input → tạo mặc định
         elif algorithm in no_input_algorithms:
             start_state = [0] * 9  # không dùng
             goal_state = [1, 2, 3, 4, 5, 6, 7, 8, 0]
 
-        # ✅ Các thuật toán còn lại cần input từ người dùng
+        # Các thuật toán còn lại cần input từ người dùng
         else:
             start_state = [
                 int(entry.get()) if entry.get().isdigit() else 0
@@ -121,13 +121,13 @@ def solve_puzzle(_, __, algorithm, canvas, root):
                 messagebox.showinfo("Result", "This puzzle is not solvable")
                 return
 
-        # ✅ Chạy thuật toán
+        # Chạy thuật toán
         start_time = time()
         result = algorithms[algorithm](start_state, goal_state)
         end_time = time()
         elapsed_time = end_time - start_time
 
-        # ✅ Một số thuật toán trả về 3 phần tử (path, expansions, depth)
+        # Một số thuật toán trả về 3 phần tử (path, expansions, depth)
         if isinstance(result, tuple) and len(result) == 3:
             solution, expansions, _ = result
         else:
@@ -244,7 +244,7 @@ def confirm_input():
 
 # GUI Setup
 root = tk.Tk()
-root.title("8 Puzzle Solver - Vũ Quốc Trung_23110353")
+root.title("8 Puzzle Solver")
 
 main_frame = tk.Frame(root)
 main_frame.pack()
@@ -344,7 +344,6 @@ algo_combobox['values'] = [
     "Stochastic Hill Climbing",
     "Simulated Annealing",
     "Beam Search",
-    "Genetic Algorithm",
 
     "--- Constraint Satisfaction ---",
     "Backtracking Search",
@@ -358,6 +357,7 @@ algo_combobox['values'] = [
 
     "--- Reinforcement Learning ---",
     "Q Learning",
+    "Genetic Algorithm",
 ]
 algo_combobox.pack()
 

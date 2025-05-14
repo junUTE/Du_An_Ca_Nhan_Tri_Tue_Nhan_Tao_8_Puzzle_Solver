@@ -1,4 +1,3 @@
-from utils import is_solvable
 import random
 
 MOVES = [(0,1), (1,0), (0,-1), (-1,0)]
@@ -14,7 +13,7 @@ def heuristic(state, goal):
 
 def simple_hill_climbing(start, goal):
     current = start
-    path = [start]  # Include start in the path
+    path = [start]  # Bao gồm 'start' trong đường dẫn
     expansions = 0
 
     while current != goal:
@@ -30,14 +29,14 @@ def simple_hill_climbing(start, goal):
                 new_state[idx], new_state[new_idx] = new_state[new_idx], new_state[idx]
                 neighbors.append(new_state)
 
-        # Sort neighbors by heuristic (Manhattan distance)
+        #"Sắp xếp các điểm lân cận theo heuristic (khoảng cách Manhattan)
         neighbors.sort(key=lambda state: heuristic(state, goal))
         expansions += len(neighbors)
 
-        # Choose the best neighbor
+        # Chọn điểm lân cận tốt nhất
         best_neighbor = neighbors[0]
         if heuristic(best_neighbor, goal) >= heuristic(current, goal):
-            # No improvement, terminate
+            # Nếu không có cải thiện, dừng lại
             return None, expansions
 
         current = best_neighbor
@@ -48,7 +47,7 @@ def simple_hill_climbing(start, goal):
 def steepest_ascent_hill_climbing(start, goal):
     """Steepest-Ascent Hill Climbing algorithm."""
     current = start
-    path = [start]  # Include start in the path
+    path = [start]  # Bao gồm 'start' trong đường dẫn
     expansions = 0
 
     while current != goal:
@@ -56,7 +55,7 @@ def steepest_ascent_hill_climbing(start, goal):
         row, col = divmod(idx, 3)
         neighbors = []
 
-        # Generate all possible neighbors
+        # Tạo tất cả các điểm lân cận có thể có
         for move in MOVES:
             new_row, new_col = row + move[0], col + move[1]
             if 0 <= new_row < 3 and 0 <= new_col < 3:
@@ -65,14 +64,14 @@ def steepest_ascent_hill_climbing(start, goal):
                 new_state[idx], new_state[new_idx] = new_state[new_idx], new_state[idx]
                 neighbors.append(new_state)
 
-        # Sort neighbors by heuristic (Manhattan distance)
+        # Sắp xếp các điểm lân cận theo heuristic (khoảng cách Manhattan)
         neighbors.sort(key=lambda state: heuristic(state, goal))
         expansions += len(neighbors)
 
-        # Choose the best neighbor
+        # Chọn điểm lân cận tốt nhất
         best_neighbor = neighbors[0]
         if heuristic(best_neighbor, goal) >= heuristic(current, goal):
-            # No improvement, terminate
+            # Nếu không có cải thiện, dừng lại
             return None, expansions
 
         current = best_neighbor
@@ -82,14 +81,14 @@ def steepest_ascent_hill_climbing(start, goal):
 
 def Stochastic_hill_Climbing(start, goal):
     current = start
-    path = [start]  # Include start in the path
+    path = [start]  # Bao gồm 'start' trong đường dẫn
     expansions = 0
 
     while current != goal:
         idx = current.index(0)
         row, col = divmod(idx, 3)
         neighbors = []
-        # Generate all possible neighbors
+        # Tạo tất cả các điểm lân cận có thể có
         for move in MOVES:
             new_row, new_col = row + move[0], col + move[1]
             if 0 <= new_row < 3 and 0 <= new_col < 3:
@@ -98,15 +97,15 @@ def Stochastic_hill_Climbing(start, goal):
                 new_state[idx], new_state[new_idx] = new_state[new_idx], new_state[idx]
                 neighbors.append(new_state)
 
-        # Filter neighbors with better heuristic values
+        # Sắp xếp các điểm lân cận theo heuristic (khoảng cách Manhattan)
         better_neighbors = [neighbor for neighbor in neighbors if heuristic(neighbor, goal) < heuristic(current, goal)]
         expansions += len(neighbors)
 
         if not better_neighbors:
-            # No better neighbors, terminate
+            # Nếu không có điểm lân cận tốt hơn, dừng lại
             return None, expansions
 
-        # Randomly select one of the better neighbors
+        # Chọn ngẫu nhiên một trong các điểm lân cận tốt hơn
         current = random.choice(better_neighbors)
         path.append(current)
 
@@ -137,7 +136,7 @@ def Simulated_Annealing(start, goal):
         expansions += len(neighbors)
 
         if not neighbors:
-            return path, expansions  # Return the path even if the goal is not reached
+            return path, expansions  # Trả về đường dẫn nếu không có hàng xóm
 
         probabilities = []
         for neighbor in neighbors:
@@ -153,7 +152,7 @@ def Simulated_Annealing(start, goal):
         current = random.choices(neighbors, probabilities)[0]
         path.append(current)
 
-        # Update the best state
+        # Cập nhật nhiệt độ
         h = heuristic(current, goal)
         if h < best_score:
             best = current
@@ -164,25 +163,25 @@ def Simulated_Annealing(start, goal):
     if current == goal:
         return path, expansions
     else:
-        return path, expansions  # Return the path even if the goal is not reached
+        return path, expansions  # Trả về đường dẫn nếu không tìm thấy giải pháp
 
 def Beam_Search(start, goal, beam_width=3):
     """Beam Search algorithm for solving the 8-puzzle problem."""
-    queue = [(heuristic(start, goal), start, [start])]  # Include start in the path
-    visited = set([tuple(start)])  # Track visited states
+    queue = [(heuristic(start, goal), start, [start])]  # Bắt đầu với hàng đợi chứa trạng thái khởi đầu
+    visited = set([tuple(start)])  # Tập các trạng thái đã thăm
 
-    expansions = 0  # Count the number of expansions
+    expansions = 0  # Biến đếm số lần mở rộng nút
     while queue:
-        # Sort the queue based on the heuristic value
+        # Sắp xếp hàng đợi theo giá trị heuristic
         queue.sort(key=lambda x: x[0])
-        # Keep only the top beam_width elements
+        # Chỉ giữ lại beam_width trạng thái tốt nhất
         queue = queue[:beam_width]
 
-        next_queue = []  # Prepare the next level of the queue
+        next_queue = []  # Hàng đợi cho các trạng thái tiếp theo
         for _, state, path in queue:
             expansions += 1
             if state == goal:
-                return path, expansions  # Return the full path and expansions
+                return path, expansions  # Trả về đường dẫn nếu tìm thấy giải pháp
             idx = state.index(0)
             row, col = divmod(idx, 3)
             neighbors = []
@@ -195,71 +194,12 @@ def Beam_Search(start, goal, beam_width=3):
                     if tuple(new_state) not in visited:
                         neighbors.append(new_state)
                         visited.add(tuple(new_state))
-            # Add neighbors to the next queue with their heuristic value
+            # Thêm các hàng xóm vào hàng đợi tiếp theo
             for neighbor in neighbors:
                 next_queue.append((heuristic(neighbor, goal), neighbor, path + [neighbor]))
 
-        # Update the queue for the next iteration
+        # Cập nhật hàng đợi
         queue = next_queue
 
-    return None, expansions  # Return None if no solution is found
+    return None, expansions  # Trả về None nếu không tìm thấy giải pháp
 
-POPULATION_SIZE = 100
-MUTATION_RATE = 0.1
-MAX_GENERATIONS = 200
-
-def generate_individual():
-    while True:
-        individual = list(range(9))
-        random.shuffle(individual)
-        if is_solvable(individual):
-            return individual
-
-def fitness(individual, goal):
-    return -manhattan(individual, goal)  # càng gần đích, giá trị càng cao
-
-def crossover(parent1, parent2):
-    size = len(parent1)
-    start, end = sorted(random.sample(range(size), 2))
-    child = [None] * size
-    child[start:end] = parent1[start:end]
-
-    p2_filtered = [x for x in parent2 if x not in child]
-    idx = 0
-    for i in range(size):
-        if child[i] is None:
-            child[i] = p2_filtered[idx]
-            idx += 1
-    return child
-
-def mutate(individual):
-    if random.random() < MUTATION_RATE:
-        i, j = random.sample(range(9), 2)
-        individual[i], individual[j] = individual[j], individual[i]
-    return individual
-
-def Genetic_Algorithm(start_state, goal_state):
-    population = [generate_individual() for _ in range(POPULATION_SIZE)]
-    path = []
-    expansions = 0
-
-    for generation in range(MAX_GENERATIONS):
-        population.sort(key=lambda x: fitness(x, goal_state), reverse=True)
-        best = population[0]
-
-        path.append(best)
-        expansions += len(population)
-
-        if best == goal_state:
-            return path, expansions
-
-        next_gen = population[:10]  # elitism
-        while len(next_gen) < POPULATION_SIZE:
-            parent1, parent2 = random.choices(population[:50], k=2)
-            child = crossover(parent1, parent2)
-            child = mutate(child)
-            next_gen.append(child)
-
-        population = next_gen
-
-    return path, expansions

@@ -1,8 +1,14 @@
 from collections import defaultdict
+from utils import is_solvable
 import random
 
-MOVES = [(0,1), (1,0), (0,-1), (-1,0)]  # RIGHT, DOWN, LEFT, UP
+
+MOVES = [(0,1), (1,0), (0,-1), (-1,0)] 
 MOVE_NAMES = ['RIGHT', 'DOWN', 'LEFT', 'UP']
+
+def manhattan(state, goal):
+    return sum(abs((val - 1) % 3 - (i % 3)) + abs((val - 1) // 3 - (i // 3))
+               for i, val in enumerate(state) if val != 0)
 
 def encode(state):
     return tuple(state)
@@ -81,3 +87,63 @@ def Q_Learning(start_state, goal_state, episodes=5000, alpha=0.1, gamma=0.9, eps
         return path, expansions
     else:
         return [], expansions
+    
+POPULATION_SIZE = 100
+MUTATION_RATE = 0.1
+MAX_GENERATIONS = 200
+
+def generate_individual():
+    while True:
+        individual = list(range(9))
+        random.shuffle(individual)
+        if is_solvable(individual):
+            return individual
+
+def fitness(individual, goal):
+    return -manhattan(individual, goal)  # càng gần đích, giá trị càng cao
+
+def crossover(parent1, parent2):
+    size = len(parent1)
+    start, end = sorted(random.sample(range(size), 2))
+    child = [None] * size
+    child[start:end] = parent1[start:end]
+
+    p2_filtered = [x for x in parent2 if x not in child]
+    idx = 0
+    for i in range(size):
+        if child[i] is None:
+            child[i] = p2_filtered[idx]
+            idx += 1
+    return child
+
+def mutate(individual):
+    if random.random() < MUTATION_RATE:
+        i, j = random.sample(range(9), 2)
+        individual[i], individual[j] = individual[j], individual[i]
+    return individual
+
+def Genetic_Algorithm(start_state, goal_state):
+    population = [generate_individual() for _ in range(POPULATION_SIZE)]
+    path = []
+    expansions = 0
+
+    for generation in range(MAX_GENERATIONS):
+        population.sort(key=lambda x: fitness(x, goal_state), reverse=True)
+        best = population[0]
+
+        path.append(best)
+        expansions += len(population)
+
+        if best == goal_state:
+            return path, expansions
+
+        next_gen = population[:10]  # Giữ lại 10 cá thể tốt nhất
+        while len(next_gen) < POPULATION_SIZE:
+            parent1, parent2 = random.choices(population[:50], k=2)
+            child = crossover(parent1, parent2)
+            child = mutate(child)
+            next_gen.append(child)
+
+        population = next_gen
+
+    return path, expansions

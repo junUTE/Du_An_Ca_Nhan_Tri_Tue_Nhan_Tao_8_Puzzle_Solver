@@ -146,28 +146,14 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 #### 📌 And-Or Graph Search
 ![And-or Graph Search](gif/And_or_graph_Search.gif)
 #### 📌 Belief State Search (Belief BFS)
-![Belief State Search]()
+![Belief State Search](gif/Belief_BFS.gif)
 #### 📌 Searching with No Observation
 ![Searching with No Observation](gif/searchinh_with_no_observat.gif)
 ### 3.6. Học tăng cường (Reinforcement Learning)
 #### 📌 Genetic Algorithm
-![Genetic Algorithm]()
+![Genetic Algorithm](gif/Genetic.gif)
 #### 📌 Q-Learning
-![Q-Learning](gif/searchinh_with_no_observat.gif)
+![Q-Learning](gif/Q_Learning.gif)
 ---
-
-## 🔍 **Thuật toán Tìm kiếm**
-
-
-
-
-
-
-
-
-
----
-
-## 🧠 **Thuật toán Tối ưu hóa (Local Search)**
 
 

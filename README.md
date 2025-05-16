@@ -114,6 +114,8 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 
 #### 📌 Iterative Deepening DFS (IDDFS)
 ![IDDFS](gif/IDDFS.gif)
+
+
 ### 3.2. Thuật toán tìm kiếm không thông tin (Informed Search)
 ### 📌 A\* Search
 ![A_star](gif/A_star.gif)
@@ -125,6 +127,13 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 ![IDA_Star](gif/IDA_Star.gif)
 
 ### 3.3. Thuật toán tìm kiếm có ràng buộc (Constraint Satisfaction Problem)
+![Backtracking](gif/And_or_graph_Search.gif)
+
+#### 📌 Depth-First Search (DFS)
+![Backtracking with AC3](gif/Backtracking_with_AC3.gif)
+
+#### 📌 Uniform Cost Search (UCS)
+![Trial and Error](gif/Trial_and_Error.gif)
 
 ### 3.4. Thuật toán tìm kiếm cục bộ (Local Search)
 #### 📌 Beam Search
@@ -153,7 +162,7 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 #### 📌 Genetic Algorithm
 ![Genetic Algorithm](gif/Genetic.gif)
 #### 📌 Q-Learning
-![Q-Learning](gif/Q_Learning.gif)
+![Q-Learning](gif/Q_learning.gif)
 ---
 
 

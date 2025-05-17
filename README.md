@@ -140,6 +140,7 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 
 #### So sánh kết quả các thuật toán
 ![Uninformed](img/Uninformed.png)
+
     - BFS: Tìm được đường đi ngắn nhất nhưng tốn nhiều bộ nhớ
     - DFS: Do duyệt theo chiều sau nên khó tránh khỏi vòng lặp, không tìm được đường đi
     - USC: Đảm bảo tối ưu về chi phí, nhưng tốn nhiều tài nguyên

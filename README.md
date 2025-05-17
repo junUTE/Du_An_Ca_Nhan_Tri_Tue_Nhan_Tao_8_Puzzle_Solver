@@ -12,14 +12,13 @@
   - Nhập trạng thái bắt đầu và trạng thái đích.
   - Lựa chọn thuật toán cần chạy.
   - Quan sát quá trình giải thông qua mô phỏng.
-  - Điều chỉnh tốc độ hiển thị.
-  - Xuất kết quả ra file `.csv`.  
   Giao diện được thiết kế tối giản, dễ sử dụng và thân thiện với người học.
 
 - **So sánh và đánh giá hiệu quả thuật toán:**  
   Hệ thống đo lường các chỉ số:
   - Thời gian thực thi (tính bằng giây).
-  - Số lần mở rộng trạng thái (expansions).  
+  - Số lần mở rộng trạng thái (expansions).
+  - Số bước (steps).
   Nhờ đó, người dùng có thể đánh giá ưu – nhược điểm của từng thuật toán trong các tình huống khác nhau.
 
 - **Hỗ trợ trực quan hóa và học tập:**  

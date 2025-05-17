@@ -37,9 +37,9 @@ def draw_board(canvas, board, step, elapsed, expansions=0):
     expansion_label.config(text=f"Expansions: {expansions}")
 
 
-def save_to_data_grid(algorithm, time_elapsed, expansions):
+def save_to_data_grid(algorithm, time_elapsed, expansions, steps):
     """Save algorithm results to the data grid view."""
-    data_grid.insert("", "end", values=(algorithm, f"{time_elapsed:.3f}", expansions))
+    data_grid.insert("", "end", values=(algorithm, round(time_elapsed, 3), expansions, steps))
 
 def log_step(step, board):
     text_box.insert(tk.END, f"Step {step}:\n")
@@ -140,10 +140,11 @@ def solve_puzzle(_, __, algorithm, canvas, root):
                 log_step(i, step)
                 root.update()
                 sleep(0.5)
-            save_to_data_grid(algorithm, elapsed_time, expansions)
+            num_steps = len(solution) - 1
+            save_to_data_grid(algorithm, elapsed_time, expansions, num_steps)
         else:
             messagebox.showinfo('Solution', 'No solution found')
-            save_to_data_grid(algorithm, elapsed_time, expansions)
+            save_to_data_grid(algorithm, elapsed_time, expansions, 0)
 
     except ValueError:
         messagebox.showerror("Error", "Invalid input, please enter numbers")
@@ -286,13 +287,15 @@ data_grid_frame = ttk.LabelFrame(main_frame, text="Algorithm Results", padding=(
 data_grid_frame.pack(side="left", padx=10, pady=10)
 
 # Create a Treeview widget for the data grid
-data_grid = ttk.Treeview(data_grid_frame, columns=("Algorithm", "Time", "Expansions"), show="headings", height=10)
+data_grid = ttk.Treeview(data_grid_frame, columns=("Algorithm", "Time", "Expansions", "Steps"), show="headings", height=10)
 data_grid.heading("Algorithm", text="Algorithm")
 data_grid.heading("Time", text="Time (s)")
 data_grid.heading("Expansions", text="Expansions")
+data_grid.heading("Steps", text="Steps")
 data_grid.column("Algorithm", width=200, anchor="center")
 data_grid.column("Time", width=110, anchor="center")
 data_grid.column("Expansions", width=150, anchor="center")
+data_grid.column("Steps", width=100, anchor="center")
 data_grid.pack()
 
 # Add a text box below the data grid view
@@ -344,6 +347,7 @@ algo_combobox['values'] = [
     "Stochastic Hill Climbing",
     "Simulated Annealing",
     "Beam Search",
+    "Genetic Algorithm",
 
     "--- Constraint Satisfaction ---",
     "Backtracking Search",
@@ -357,7 +361,6 @@ algo_combobox['values'] = [
 
     "--- Reinforcement Learning ---",
     "Q Learning",
-    "Genetic Algorithm",
 ]
 algo_combobox.pack()
 

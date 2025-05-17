@@ -38,20 +38,27 @@ Bài toán 8-Puzzle trong dự án được giải bằng cách tích hợp **6 
 
 > Ý tưởng thuật toán: Duyệt toàn bộ không gian trạng thái mà **không dùng thông tin thêm về đích**. Ưu tiên dựa vào cấu trúc của cây tìm kiếm.
 
-- **Breadth-First Search (BFS):** Duyệt theo **tầng/lớp**, đảm bảo tìm được đường đi ngắn nhất nhưng tốn nhiều bộ nhớ.
-- **Depth-First Search (DFS):** Duyệt **sâu xuống tối đa**, ít tốn bộ nhớ nhưng có thể rơi vào vòng lặp.
-- **Uniform Cost Search (UCS):** Luôn mở rộng trạng thái có **chi phí thấp nhất** tính đến hiện tại.
-- **Iterative Deepening DFS (IDDFS):** Kết hợp ưu điểm của BFS và DFS bằng cách lặp DFS với độ sâu tăng dần.
-
+- **Breadth-First Search (BFS):** Là thuật toán tìm kiếm duyệt theo tầng (lớp), mở rộng các trạng thái gần gốc nhất trước khi đi sâu vào các mức sâu hơn. BFS sử dụng cấu trúc hàng đợi (queue) hoạt động theo nguyên tắc FIFO (First In, First Out) để đảm bảo duyệt theo chiều rộng.Duyệt theo **tầng/lớp**, đảm bảo tìm được đường đi ngắn nhất nhưng tốn nhiều bộ nhớ.
+  
+- **Depth-First Search (DFS):** Là thuật toán duyệt theo chiến lược đi sâu tối đa vào nhánh hiện tại trước khi quay lại và duyệt các nhánh khác. DFS sử dụng cấu trúc ngăn xếp (stack) hoạt động theo nguyên tắc LIFO (Last In, First Out) để lưu trữ các trạng thái kế tiếp cần khám phá. Duyệt **sâu xuống tối đa**, ít tốn bộ nhớ nhưng có thể rơi vào vòng lặp.
+  
+- **Uniform Cost Search (UCS):** Là thuật toán tìm kiếm mở rộng trạng thái có tổng chi phí thấp nhất từ trạng thái ban đầu. UCS sử dụng hàng đợi ưu tiên (priority queue) để đảm bảo luôn chọn trạng thái có chi phí lũy kế nhỏ nhất. Đây là phiên bản tổng quát của BFS khi chi phí mỗi bước không đều.
+  
+- **Iterative Deepening DFS (IDDFS):** Là thuật toán kết hợp giữa DFS (Depth-First Search) và BFS (Breadth-First Search) bằng cách duyệt theo chiều sâu có giới hạn, sau đó lặp lại với độ sâu tăng dần. Mỗi vòng lặp là một DFS mới với giới hạn độ sâu lớn hơn trước một đơn vị.
 ---
 
 ### 2.2. **Informed Search** (*Tìm kiếm có sử dụng heuristic*)
 
 > Ý tưởng thuật toán: **Hướng dẫn quá trình tìm kiếm** bằng một hàm đánh giá (heuristic) giúp lựa chọn trạng thái “hứa hẹn” hơn.
 
-- **Greedy Search:** Luôn chọn trạng thái có giá trị heuristic thấp nhất (nhanh nhưng có thể không tối ưu).
-- **A\* Search:** Cân bằng giữa chi phí đi qua và heuristic (`f(n) = g(n) + h(n)`) để tìm đường đi tối ưu.
-- **Iterative Deepening A\* (IDA\*):** Kết hợp A\* với duyệt theo độ sâu để tiết kiệm bộ nhớ.
+- **Greedy Search:** Là thuật toán tìm kiếm có định hướng, luôn ưu tiên mở rộng trạng thái có giá trị heuristic thấp nhất – tức là trạng thái được đánh giá là "gần đích nhất" theo một tiêu chí ước lượng. Greedy Search sử dụng hàng đợi ưu tiên (priority queue) với trọng số là hàm heuristic h(n).
+  
+- **A\* Search:** Là một trong những thuật toán tìm kiếm mạnh mẽ nhất, A\* sử dụng hàm đánh giá f(n) = g(n) + h(n) để lựa chọn trạng thái tiếp theo. Trong đó:
+                   + g(n) là chi phí từ trạng thái bắt đầu đến trạng thái hiện tại.
+                   + h(n) là ước lượng chi phí còn lại từ trạng thái hiện tại đến mục tiêu (heuristic).
+                  A* sử dụng hàng đợi ưu tiên (priority queue) để mở rộng các trạng thái có giá trị f(n) thấp nhất.
+  
+- **Iterative Deepening A\* (IDA\*):** Là thuật toán kết hợp giữa A\* và DFS có giới hạn, nhằm khắc phục nhược điểm tiêu tốn bộ nhớ của A\*. Thay vì sử dụng hàng đợi ưu tiên để mở rộng trạng thái theo f(n) = g(n) + h(n), IDA* sẽ thực hiện tìm kiếm theo chiều sâu với ngưỡng giới hạn f(n) tăng dần qua mỗi vòng lặp.
 
 ---
 
@@ -59,31 +66,41 @@ Bài toán 8-Puzzle trong dự án được giải bằng cách tích hợp **6 
 
 > Ý tưởng thuật toán: Bắt đầu từ một trạng thái ban đầu và **cải thiện liên tục** dựa trên hàng xóm lân cận – không cần duyệt toàn bộ cây trạng thái.
 
-- **Simple Hill Climbing:** Luôn chọn hàng xóm tốt hơn – dừng lại khi không còn cải thiện.
-- **Steepest-Ascent Hill Climbing:** Chọn hàng xóm tốt nhất trong tất cả các hàng xóm.
-- **Stochastic Hill Climbing:** Chọn **ngẫu nhiên một hàng xóm tốt hơn**.
-- **Simulated Annealing:** Chấp nhận trạng thái xấu hơn với xác suất giảm dần (tránh kẹt local optimum).
-- **Beam Search:** Giữ lại **k trạng thái tốt nhất** tại mỗi bước (giống BFS nhưng có giới hạn “tia sáng”).
-
+- **Simple Hill Climbing:** Là thuật toán tìm kiếm cục bộ đơn giản, trong đó agent luôn di chuyển sang trạng thái hàng xóm có giá trị tốt hơn (tức heuristic thấp hơn). Quá trình lặp lại cho đến khi không còn trạng thái nào tốt hơn hiện tại, khi đó thuật toán dừng lại.
+  
+- **Steepest-Ascent Hill Climbing:** Là biến thể cải tiến của Hill Climbing, trong đó thuật toán sẽ duyệt qua tất cả các trạng thái hàng xóm hợp lệ và chọn trạng thái có **giá trị heuristic tốt nhất** (tức là thấp nhất). Quá trình lặp lại cho đến khi không còn hàng xóm nào tốt hơn trạng thái hiện tại.
+  
+- **Stochastic Hill Climbing:** Là biến thể của Hill Climbing trong đó thuật toán không chọn hàng xóm tốt nhất, mà thay vào đó sẽ **chọn ngẫu nhiên một hàng xóm tốt hơn** trạng thái hiện tại. Điều này giúp tăng tính đa dạng trong tìm kiếm và giảm khả năng mắc kẹt tại cực trị cục bộ.
+  
+- **Simulated Annealing:** Là thuật toán tìm kiếm cục bộ lấy cảm hứng từ quá trình luyện kim, khi kim loại được nung nóng rồi làm nguội chậm để đạt trạng thái ổn định tối ưu. Tương tự, thuật toán **chấp nhận cả những trạng thái xấu hơn** trạng thái hiện tại với một xác suất nhất định, nhằm **tránh kẹt tại cực trị cục bộ**. Xác suất này giảm dần theo thời gian (theo nhiệt độ), giúp tìm kiếm dần hội tụ.
+  
+- **Beam Search:** Là phiên bản cải tiến của BFS với giới hạn, trong đó tại mỗi bước mở rộng, thuật toán chỉ **giữ lại k trạng thái có giá trị heuristic tốt nhất** thay vì mở rộng toàn bộ. Tham số k (gọi là **beam width**) đóng vai trò như “tia sáng”, giúp thu hẹp phạm vi tìm kiếm để **cân bằng giữa hiệu quả và độ chính xác**.
+  
+- **Genetic Algorithm:** Là thuật toán tìm kiếm mô phỏng quá trình **chọn lọc tự nhiên** trong sinh học. Thuật toán bắt đầu với một quần thể các lời giải ngẫu nhiên, sau đó lặp lại các quá trình như **lựa chọn (selection)**, **lai ghép (crossover)** và **đột biến (mutation)** để tạo ra các thế hệ mới. Qua nhiều vòng lặp, quần thể dần tiến hóa đến lời giải tốt hơn.
 ---
 
 ### 2.4. **Constraint Satisfaction Problem (CSP)** (*Bài toán ràng buộc*)
 
 > Ý tưởng thuật toán: Biểu diễn bài toán bằng **biến, miền giá trị, và ràng buộc** giữa các biến. Mục tiêu là tìm gán giá trị **thoả mãn toàn bộ ràng buộc**.
 
-- **Backtracking Search:** Gán giá trị từng biến, quay lui nếu phát hiện vi phạm.
-- **Backtracking with AC-3:** Kết hợp với lọc ràng buộc AC-3 để giảm không gian tìm kiếm.
-- **Trial-and-Error:** Thử ngẫu nhiên các giá trị hợp lệ cho đến khi ra kết quả đúng.
+- **Backtracking Search:** Là thuật toán giải bài toán ràng buộc bằng cách **gán giá trị cho từng biến một cách tuần tự**, và quay lui (**backtrack**) nếu phát hiện xung đột với các ràng buộc đã đặt. Quá trình tiếp tục cho đến khi tìm được một phép gán đầy đủ thỏa mãn tất cả các ràng buộc hoặc xác định rằng không có lời giải.
+  
+- **Backtracking with AC-3:** Là phiên bản mở rộng của backtracking, trong đó kết hợp với thuật toán **AC-3** (**Arc Consistency 3**) để **lọc ràng buộc** trước và trong quá trình gán giá trị. AC-3 loại bỏ các giá trị không hợp lệ trong miền của biến, giúp *giảm không gian tìm kiếm** và tránh được nhiều nhánh sai.
 
+- **Trial-and-Error:** Là phương pháp giải bài toán CSP bằng cách **gán ngẫu nhiên các giá trị hợp lệ** cho các biến, sau đó kiểm tra toàn bộ ràng buộc. Quá trình được lặp lại nhiều lần với các tổ hợp khác nhau cho đến khi tìm được một lời giải **thoả mãn tất cả ràng buộc**, hoặc đạt đến số lần thử giới hạn.
 ---
 
 ### 2.5. **Complex Environment Search** (*Tìm kiếm trong môi trường không chắc chắn*)
 
 > Ý tưởng thuật toán: Dành cho các môi trường **không quan sát đầy đủ**, hoặc có **kết quả hành động không xác định**.
 
-- **AND-OR Graph Search:** Tìm cây kế hoạch gồm cả các nút OR (chọn hành động) và AND (xử lý mọi kết quả có thể xảy ra).
-- **No Observation Search:** Tìm kiếm trong tình huống **không có thông tin về trạng thái** – chỉ dựa vào logic hành động.
-- **Belief State Search (Belief BFS):** Làm việc trên **tập hợp các trạng thái có thể** (state set), thay vì trạng thái cụ thể.
+- **AND-OR Graph Search:** Là thuật toán tìm kiếm được thiết kế cho **môi trường không xác định**, nơi một hành động có thể dẫn đến nhiều kết quả khác nhau. Thuật toán xây dựng một **cây kế hoạch** (plan tree), trong đó:
+                  + Nút OR đại diện cho **lựa chọn hành động** tại mỗi trạng thái.
+                  + Nút AND đại diện cho việc phải **xử lý tất cả các kết quả có thể xảy ra** từ một hành động.
+  
+- **No Observation Search:** Là thuật toán được thiết kế cho các môi trường không có khả năng **quan sát trạng thái hiện tại**. Agent bắt đầu với một tập hợp tất cả các **trạng thái khả dĩ** và chỉ sử dụng **logic hành động** để thu hẹp dần tập trạng thái niềm tin (belief state). Vì không có cảm biến hay tín hiệu phản hồi từ môi trường, thuật toán phải đảm bảo rằng kế hoạch tìm được sẽ đưa agent đến trạng thái mục tiêu bất kể trạng thái ban đầu thực sự là gì.
+
+- **Belief State Search (Belief BFS):** Là thuật toán tìm kiếm hoạt động trên **tập hợp các trạng thái có thể** (belief state) thay vì một trạng thái cụ thể. Thuật toán mô phỏng cách agent suy luận khi **môi trường không quan sát đầy đủ**, bằng cách duy trì và cập nhật một tập hợp trạng thái có thể đang tồn tại. Ở mỗi bước, một hành động được áp dụng đồng thời lên toàn bộ tập trạng thái, sau đó cập nhật tập belief state mới. Quá trình lặp lại cho đến khi ít nhất một trạng thái trong tập **trùng với trạng thái mục tiêu**.
 
 ---
 
@@ -91,8 +108,8 @@ Bài toán 8-Puzzle trong dự án được giải bằng cách tích hợp **6 
 
 > Ý tưởng thuật toán: Không có thuật toán tìm kiếm cụ thể, thay vào đó là **tự học qua tương tác với môi trường** hoặc **tiến hóa qua thế hệ**.
 
-- **Q-Learning:** Học giá trị hành động qua tương tác để xây dựng chính sách tối ưu.
-- **Genetic Algorithm:** Mô phỏng chọn lọc tự nhiên – sử dụng lai ghép, đột biến để tạo thế hệ lời giải mới, dần tiến hoá đến lời giải tốt nhất.
+- **Q-Learning:** Là thuật toán học tăng cường (reinforcement learning) theo mô hình **không cần biết trước môi trường** (model-free). Q-Learning cho phép agent học giá trị của từng hành động trong từng trạng thái thông qua tương tác với môi trường, từ đó dần hình thành **chính sách hành động tối ưu**. Thuật toán duy trì một bảng Q lưu giá trị Q(s, a), tức giá trị kỳ vọng khi thực hiện hành động a tại trạng thái s, sau đó đi theo chính sách tốt nhất. Q được cập nhật dần theo công thức dựa trên phần thưởng thu được và ước lượng tương lai.
+ 
 
 ---
 ## 3. Thực nghiệm

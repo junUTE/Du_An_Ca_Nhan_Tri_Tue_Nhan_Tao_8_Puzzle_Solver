@@ -176,6 +176,7 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 
 #### So sánh kết quả các thuật toán
 ![Informed](img/informed.png)
+
     - A\*: Tìm được đường đi ngắn nhất, nhưng tiêu hao nhiều tài nguyên
     - IDA\*: Không tìm được đường đi.
     - Greedy: Đường đi không phải ngắn nhất, nhưng tiết kiệm tài nguyên
@@ -214,6 +215,7 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 
 #### So sánh kết quả các thuật toán
 ![CSP](img/CSP.png)
+
     - Backtracking: Tìm được lời giải, tốc độ nhanh nhưng số lần mở rộng nhiều.
     - Backtracking with AC3: Cũng tìm được lời giải, nhưng tốc độ chậm hơn đáng kể do mất thời gian xử lý các ràng buộc bằng thuật toán AC3. Tuy vậy, số lần mở rộng không giảm so với Backtracking vì bài toán 8-Puzzle vốn không có nhiều ràng buộc loại trừ để AC3 phát huy hiệu quả.
     - Trial and Error: Tìm được kết quả, nhưng tốn nhiều tài nguyên.
@@ -253,12 +255,13 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 
 #### 📌 Genetic Algorithm
 ![Genetic Algorithm](gif/Genetic.gif)
+#### So sánh kết quả các thuật toán
+![Local Search](img/local.png)
+
     - Simple / Steepest / Stochastic Hill Climbing: Không tìm được lời giải, vì dễ rơi vào cực trị cục bộ mà không có chiến lược thoát.
     - Simulated Annealing: tìm được lời giải nhưng số bước rất lớn (619 bước) do khả năng thoát khỏi cực trị cục bộ tốt nhờ cho phép chọn trạng thái xấu hơn có xác suất giảm dần
     - Beam Search: Hiệu quả cao chỉ cần mở 140 node, đạt được lời giải với 47 bước.
     - Genetic Algorithm: Tìm được lời giải rất ngắn chỉ sau 400 lần mở rộng.
-#### So sánh kết quả các thuật toán
-![Local Search](img/local.png)
 #### Nhận xét
 ##### Ưu điểm
     - Ưu điểm
@@ -293,7 +296,8 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 #### So sánh kết quả các thuật toán
 ![complex](img/flex.png)
 ![complex2](img/flex_belief.png)
-    -  And-Or Graph Search: Tìm được lời giải với 51 bước. Thời gian và số node mở rộng rất lớn, do phải xử lý toàn bộ các nhánh AND và OR trong cây kế hoạch.
+
+    - And-Or Graph Search: Tìm được lời giải với 51 bước. Thời gian và số node mở rộng rất lớn, do phải xử lý toàn bộ các nhánh AND và OR trong cây kế hoạch.
     - Searching With No Observation: Không tìm thất lời giải.
     - Belief-State BFS: Tìm được lời giải, số lượng mở rộng tương đối nhiều (25107), do mỗi bước xử lý cả một tập trạng thái.
 #### Nhận xét
@@ -322,6 +326,7 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
     TDₜ(s, a): Sai số thời gian tạm thời (TD error), đại diện cho chênh lệch giữa giá trị kỳ vọng và thực tế, thường được tính bằng:
 #### 📌 Q-Learning
 ![Q-Learning](gif/Q_learning.gif)
+
     - Q-learning: Tìm được lời giải, tối ưu thời gian và bộ nhớ.
 #### So sánh kết quả các thuật toán
 ![Uninformed](img/learning.png)

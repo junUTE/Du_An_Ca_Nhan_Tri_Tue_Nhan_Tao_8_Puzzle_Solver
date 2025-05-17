@@ -122,8 +122,9 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 ### 3.1. Thuật toán tìm kiếm không có thông tin (Uninformed Search)
 #### Thành phần chính
 - **Trạng thái đầu**: là một danh sách gồm 9 phần tử được nhập từ người dùng, từ 0 đến 8 (0 là ô trống) được hiển thị dưới dạng lưới 3x3. Ví dụ [2, 6, 5, 0, 8, 7, 4, 3, 1]
-- **Hành động**: Di chuyển ô trống theo 4 hướng: lên, xuống, trái, phải để tạo ra các trạng thái tiếp theo.
 - **Trạng thái mục tiêu**: Trạng thái mà các ô được sắp xếp theo thứ tự tăng dần từ trái sang phải, từ trên xuống dưới, với ô trống (0) ở góc dưới cùng bên phải. Cụ thể: [1, 2, 3, 4, 5, 6, 7, 8, 0]
+- **Không gian trạng thái**: 8-Puzzle gồm 8 ô số (1–8) và 1 ô trống (0) trên lưới 3×3. Tổng số cấu hình khác nhau của các ô là: 9!=362,880 trạng thái khác nhau. Tuy nhiên, chỉ có 9!/2 = 181,440 trạng thái hợp lệ.
+- **Hành động**: Di chuyển ô trống theo 4 hướng: lên, xuống, trái, phải để tạo ra các trạng thái tiếp theo.
 - **Hàm chi phí**: Mỗi hành động di chuyển có chi phí là 1.
 - **Đặc điểm**: Không sử dụng hàm heuristic, dựa hoàn toàn vào cấu trúc không gian trạng thái.
 #### 📌 Breadth-First Search (BFS)
@@ -155,8 +156,9 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 ### 3.2. Thuật toán tìm kiếm không thông tin (Informed Search)
 #### Thành phần chính
 - **Trạng thái đầu**: là một danh sách gồm 9 phần tử được nhập từ người dùng, từ 0 đến 8 (0 là ô trống) được hiển thị dưới dạng lưới 3x3. Ví dụ [2, 6, 5, 0, 8, 7, 4, 3, 1]
-- **Hành động**: Di chuyển ô trống theo 4 hướng: lên, xuống, trái, phải để tạo ra các trạng thái tiếp theo.
 - **Trạng thái mục tiêu**: Trạng thái mà các ô được sắp xếp theo thứ tự tăng dần từ trái sang phải, từ trên xuống dưới, với ô trống (0) ở góc dưới cùng bên phải. Cụ thể: [1, 2, 3, 4, 5, 6, 7, 8, 0]
+- **Không gian trạng thái**: 8-Puzzle gồm 8 ô số (1–8) và 1 ô trống (0) trên lưới 3×3. Tổng số cấu hình khác nhau của các ô là: 9!=362,880 trạng thái khác nhau. Tuy nhiên, chỉ có 9!/2 = 181,440 trạng thái hợp lệ.
+- **Hành động**: Di chuyển ô trống theo 4 hướng: lên, xuống, trái, phải để tạo ra các trạng thái tiếp theo.
 - **Hàm chi phí**: Mỗi hành động di chuyển có chi phí là 1.
 - **Đặc điểm**: Sử dụng hàm heuristic, để hướng dẫn tìm kiếm không gian trạng thái.
 ### 📌 A\* Search
@@ -185,10 +187,11 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 #### Thành phần chính
 - **Biến**: Gồm 9 biến tương ứng với 9 vị trí trong lưới 3x3, đặt tên là X0, X1, ..., X8. Mỗi biến đại diện cho một ô trong lưới (vị trí trên bảng).
 - **Miền giá trị**: Mỗi biến có giá trị từ 0 đến 8 với 0 là ô trống, các biến không được trùng lặp các giá trị với nhau. Có thể sắp xếp ngẫu nhiên.
+- **Không gian trạng thái**: 8-Puzzle gồm 8 ô số (1–8) và 1 ô trống (0) trên lưới 3×3. Tổng số cấu hình khác nhau của các ô là: 9!=362,880 trạng thái khác nhau. Tuy nhiên, chỉ có 9!/2 = 181,440 trạng thái hợp lệ.
 - **Ràng buộc**:
      - **Ràng buộc ngang**: Các ô liền kề theo chiều ngang (X1-X2, X2-X3) phải thỏa mãn: giá trị của ô bên phải lớn hơn giá trị ô bên trái 1 đơn vị và ô bên trái không phải là 0.
-    - **Ràng buộc dọc**: Các ô liền kề theo chiều dọc (X1-X4, X2-X2) phải thỏa mãn: giá trị của ô bên dưới lớn hơn giá trị ô bên trên 3 đơn vị và ô bên trên không phải là 0.
-    - **Ràng buộc không trùng giá trị**: Mỗi biến phải nhận 1 giá trị duy nhất.
+     - **Ràng buộc dọc**: Các ô liền kề theo chiều dọc (X1-X4, X2-X2) phải thỏa mãn: giá trị của ô bên dưới lớn hơn giá trị ô bên trên 3 đơn vị và ô bên trên không phải là 0.
+     - **Ràng buộc không trùng giá trị**: Mỗi biến phải nhận 1 giá trị duy nhất.
 - **Kiểm tra khả năng**: Kiểm tra xem một giá trị có vi phạm ràng buộc với các biến đã được gán hay không
 - **Đặc điểm**
     - Backtracking CSP và Trial And Error gán ngẫu nhiên giá trị cho các biến và quay lui để tìm lời giải.
@@ -218,8 +221,9 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 ### 3.4. Thuật toán tìm kiếm cục bộ (Local Search)
 #### Thành phần chính
 - **Trạng thái đầu**: là một danh sách gồm 9 phần tử được nhập từ người dùng, từ 0 đến 8 (0 là ô trống) được hiển thị dưới dạng lưới 3x3. Ví dụ [2, 6, 5, 0, 8, 7, 4, 3, 1]
-- **Hành động**: Di chuyển ô trống theo 4 hướng: lên, xuống, trái, phải để tạo ra các trạng thái tiếp theo.
 - **Trạng thái mục tiêu**: Trạng thái mà các ô được sắp xếp theo thứ tự tăng dần từ trái sang phải, từ trên xuống dưới, với ô trống (0) ở góc dưới cùng bên phải. Cụ thể: [1, 2, 3, 4, 5, 6, 7, 8, 0]
+- **Không gian trạng thái**: 8-Puzzle gồm 8 ô số (1–8) và 1 ô trống (0) trên lưới 3×3. Tổng số cấu hình khác nhau của các ô là: 9!=362,880 trạng thái khác nhau. Tuy nhiên, chỉ có 9!/2 = 181,440 trạng thái hợp lệ.
+- **Hành động**: Di chuyển ô trống theo 4 hướng: lên, xuống, trái, phải để tạo ra các trạng thái tiếp theo.
 - Sử dụng **Mahattan Distance** để tính tổng khoảng cách di chuyển của mỗi ô từ vị trí hiện tại (x1, y1) đến vị trí trạng thái mục tiêu (x2, y2), với công thức là |x1 - x2| + |y1 - y2|
 - **Hàm chi phí**: Mỗi hành động di chuyển có chi phí là 1.
 #### 📌 Beam Search
@@ -261,7 +265,8 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 
 ### 3.5. Thuật toán tìm kiếm môi trường phức tạp (Searching in complex environments)
 #### Thành phần chính
-- **Trạng thái**: Một tập hợp các trạng thái niềm tin (belief state), biểu diễn tất cả trạng thái có thể của bài toán. Ví dụ: [2, 6, 5] 
+- **Trạng thái**: Một tập hợp các trạng thái niềm tin (belief state), biểu diễn tất cả trạng thái có thể của bài toán. Ví dụ: [2, 6, 5]
+- **Không gian trạng thái**: 
 - **Hành động**: Một hành động (ví dụ: di chuyển ô trống) được áp dụng đồng thời cho tất cả trạng thái trong tập hợp. Sau khi thực hiện, kết quả là tập hợp trạng thái mới.
 - **Kiểm tra mục tiêu**: Ít nhất một trạng thái trong tập hợp ban đầu khớp với một trạng thái mục tiêu, ví dụ: (1, 2, 3, 4, 5, 6, 7, 8, 0).
 - **Đặc điểm**: Môi trường không xác định hoặc quan sát không đầy đủ, yêu cầu xử lý nhiều trạng thái cùng lúc.
@@ -287,6 +292,7 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
     
 ### 3.6. Học tăng cường (Reinforcement Learning)
 - **Trạng thái đầu**: là một danh sách gồm 9 phần tử được nhập từ người dùng, từ 0 đến 8 (0 là ô trống) được hiển thị dưới dạng lưới 3x3. Ví dụ [2, 6, 5, 0, 8, 7, 4, 3, 1]
+- **Không gian trạng thái**: 8-Puzzle gồm 8 ô số (1–8) và 1 ô trống (0) trên lưới 3×3. Tổng số cấu hình khác nhau của các ô là: 9!=362,880 trạng thái khác nhau. Tuy nhiên, chỉ có 9!/2 = 181,440 trạng thái hợp lệ.
 - **Hành động**: Di chuyển ô trống theo 4 hướng: lên, xuống, trái, phải để tạo ra các trạng thái tiếp theo.
 - **Phần thưởng**: +100 nếu đạt trạng thái mục tiêu, -1 cho mỗi bước di chuyển, 0 cho các trường hợp khác.
 - **Bảng Q**: lưu trữ giá trị Q(s, a), thể hiện giá trị kỳ vọng khi thực hiện hành động a tại trạng thái s, sau đó đi theo chính sách tối ưu. Agent sử dụng bảng Q để dần học cách hành xử sao cho tối đa hóa phần thưởng tích lũy.

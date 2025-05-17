@@ -128,7 +128,7 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 - **Hàm chi phí**: Mỗi hành động di chuyển có chi phí là 1.
 - **Đặc điểm**: Không sử dụng hàm heuristic, dựa hoàn toàn vào cấu trúc không gian trạng thái.
 #### 📌 Breadth-First Search (BFS)
-![BFS](gif/BFSgif.gif)
+![BFS](gif/BFS.gif)
 
 #### 📌 Depth-First Search (DFS)
 ![DFS](gif/DFS.gif)

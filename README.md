@@ -50,7 +50,7 @@ Bài toán 8-Puzzle trong dự án được giải bằng cách tích hợp **6 
 
 > Ý tưởng thuật toán: **Hướng dẫn quá trình tìm kiếm** bằng một hàm đánh giá (heuristic) giúp lựa chọn trạng thái “hứa hẹn” hơn.
 
-- **Greedy Search:** Là thuật toán tìm kiếm có định hướng, luôn ưu tiên mở rộng trạng thái có giá trị heuristic thấp nhất – tức là trạng thái được đánh giá là "gần đích nhất" theo một tiêu chí ước lượng. Greedy Search sử dụng hàng đợi ưu tiên (priority queue) với trọng số là hàm heuristic h(n).
+- **Greedy Search:** Là thuật toán tìm kiếm có định hướng, luôn ưu tiên mở rộng trạng thái có giá trị heuristic thấp nhất, tức là trạng thái được đánh giá là "gần đích nhất" theo một tiêu chí ước lượng. Greedy Search sử dụng hàng đợi ưu tiên (priority queue) với trọng số là hàm heuristic h(n).
   
 - **A\* Search:** Là một trong những thuật toán tìm kiếm mạnh mẽ nhất, A\* sử dụng hàm đánh giá f(n) = g(n) + h(n) để lựa chọn trạng thái tiếp theo. Trong đó:
                    + g(n) là chi phí từ trạng thái bắt đầu đến trạng thái hiện tại.
@@ -177,8 +177,8 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 #### So sánh kết quả các thuật toán
 ![Informed](img/informed.png)
 
-    - A\*: Tìm được đường đi ngắn nhất, nhưng tiêu hao nhiều tài nguyên
-    - IDA\*: Không tìm được đường đi.
+    - A*: Tìm được đường đi ngắn nhất, nhưng tiêu hao nhiều tài nguyên
+    - IDA*: Không tìm được đường đi.
     - Greedy: Đường đi không phải ngắn nhất, nhưng tiết kiệm tài nguyên
 #### Nhận xét
 ##### Ưu điểm

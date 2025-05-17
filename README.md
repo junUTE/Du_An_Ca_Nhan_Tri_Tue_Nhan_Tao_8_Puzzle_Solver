@@ -140,7 +140,7 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 ![IDDFS](gif/IDDFS.gif)
 
 #### So sánh kết quả các thuật toán
-![Uninformed](img/
+![Uninformed](img/Uninformed.png)
 #### Nhận xét
 ##### Ưu điểm
     - Ưu điểm
@@ -171,7 +171,7 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 ![IDA_Star](gif/IDA_Star.gif)
 
 #### So sánh kết quả các thuật toán
-![Informed](img/
+![Informed](img/informed.png)
 #### Nhận xét
 ##### Ưu điểm
     - Ưu điểm
@@ -206,7 +206,7 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 ![Trial and Error](gif/Trial_and_Error.gif)
 
 #### So sánh kết quả các thuật toán
-![CSP](img/
+![CSP](img/CSP.png)
 #### Nhận xét
 ##### Ưu điểm
     - Ưu điểm
@@ -245,7 +245,7 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 ![Genetic Algorithm](gif/Genetic.gif)
 
 #### So sánh kết quả các thuật toán
-![Local Search](img/
+![Local Search](img/local.png)
 #### Nhận xét
 ##### Ưu điểm
     - Ưu điểm
@@ -278,7 +278,8 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 ![Searching with No Observation](gif/searchinh_with_no_observat.gif)
 
 #### So sánh kết quả các thuật toán
-![Uninformed](img/
+![complex](img/flex.png)
+![complex2](img/flex_belief.png)
 #### Nhận xét
 ##### Ưu điểm
     - Ưu điểm
@@ -307,7 +308,7 @@ Dưới đây là kết quả thực nghiệm chạy các thuật toán trên nh
 ![Q-Learning](gif/Q_learning.gif)
 
 #### So sánh kết quả các thuật toán
-![Uninformed](img/
+![Uninformed](img/learning.png)
 #### Nhận xét
 ##### Ưu điểm
     - Ưu điểm
